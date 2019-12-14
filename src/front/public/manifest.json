@@ -1,0 +1,11 @@
+{
+  "name": "Real-time Chat",
+  "short_name": "real-time-chat",
+  "icons": [
+
+  ],
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#212121",
+  "theme_color": "#212121"
+}

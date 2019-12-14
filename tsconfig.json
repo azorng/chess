@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "es2018", 
+    "module": "commonjs", 
+    "baseUrl": ".", /* Base directory to resolve non-absolute module names. */
+    "paths": {
+      "~/*": [
+        "./src/*",
+      ],
+      "~components/*": [
+        "./src/front/components/*"
+      ]
+    },
+    "lib": [
+      "es2017",
+      "dom",
+      "dom.iterable",
+      "scripthost"
+    ],
+    "strict": true,
+    "esModuleInterop": true, 
+    "strictPropertyInitialization": false
+ 
+  },
+  "include": [
+    "src"
+  ]
+}
