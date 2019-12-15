@@ -5,14 +5,16 @@ import { Knight } from '~/common/pieces/Knight'
 import { Bishop } from '~/common/pieces/Bishop'
 import { Roock } from '~/common/pieces/Roock'
 import { Pawn } from '~/common/pieces/Pawn'
+import _ from 'lodash'
 
 export type BoardPositions = { [key: string]: PieceBase | undefined }
-export const numbers = ['1', '2', '3', '4', '5', '6', '7', '8']
-export const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
 export class Board {
     positions: BoardPositions
     pieces: PieceBase[]
+
+    static readonly numbers = ['1', '2', '3', '4', '5', '6', '7', '8']
+    static readonly letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
     constructor() {
         this.positions = this.initBoard()
@@ -57,7 +59,7 @@ export class Board {
 
     private fillRow(rowNumber: string, piece: any, color: PieceColor) {
         const positions = this.positions
-        letters.forEach(letter => {
+        Board.letters.forEach(letter => {
             positions[letter + rowNumber] = new piece(color)
         })
     }
@@ -65,8 +67,8 @@ export class Board {
     private initBoard() {
         const board: BoardPositions = {}
 
-        letters.forEach(letter => {
-            numbers.forEach(number => {
+        Board.letters.forEach(letter => {
+            Board.numbers.forEach(number => {
                 board[letter + number] = undefined
             })
         })

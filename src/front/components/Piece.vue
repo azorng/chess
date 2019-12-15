@@ -25,12 +25,14 @@ export default class Piece extends Vue {
     }
 
     availableMoves() {
-        this.clearMoves()
-        const availableMoves = this.piece.availableMoves(this.positions)
-        availableMoves.forEach(move => {
-            document.getElementById(move)!.classList.add('available-move')
-        })
-        this.makeAvailableMovesInteractive()
+        if (this.piece.color == store.state.currentTurn) {
+            this.clearMoves()
+            const availableMoves = this.piece.availableMoves(this.positions)
+            availableMoves.forEach(move => {
+                document.getElementById(move)!.classList.add('available-move')
+            })
+            this.makeAvailableMovesInteractive()
+        }
     }
 
     private makeAvailableMovesInteractive() {
@@ -41,6 +43,7 @@ export default class Piece extends Vue {
             e.stopImmediatePropagation()
             const destination = $(this).attr('id')
             store.commit('move', { piece: self.piece, destination })
+            store.commit('toggleTurn')
             self.clearMoves()
         })
     }

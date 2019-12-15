@@ -14,19 +14,23 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import Piece from '~components/Piece.vue'
 import { store } from '~/front/store'
 import { PieceName } from '~/common/PieceBase'
-import { numbers, letters } from '~/common/Board'
+import { Board as BoardObj } from '~/common/Board'
+import _ from 'lodash'
 import $ from 'jquery'
 
 @Component
 export default class Board extends Vue {
     boardPositions = store.state.boardPositions
-    numbers = numbers.reverse()
-    letters = letters
+    letters = BoardObj.letters
 
     @Watch('boardPositions')
     onBoardChange() {
-        $('.piece').remove();
+        $('.piece').remove()
         this.renderPositions()
+    }
+
+    get numbers() {
+        return _.clone(BoardObj.numbers).reverse()
     }
 
     mounted() {

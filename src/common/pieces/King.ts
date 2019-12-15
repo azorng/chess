@@ -1,4 +1,4 @@
-import { PieceBase, PieceName, PieceColor } from '~/common/PieceBase'
+import { PieceBase, PieceName, PieceColor, Direction } from '~/common/PieceBase'
 import { BoardPositions } from '~/common/Board'
 
 export class King extends PieceBase {
@@ -8,7 +8,20 @@ export class King extends PieceBase {
         this.color = color
     }
 
-    availableMoves(board: BoardPositions): string[] {
-        throw Error()
+    availableMoves(board: BoardPositions): string[] | [] {
+        const availableMoves: string[] = []
+
+        availableMoves.push(
+            ...this.moveHelper.followDirectionUntilObstacle(Direction.UpRight, board, 1),
+            ...this.moveHelper.followDirectionUntilObstacle(Direction.UpLeft, board, 1),
+            ...this.moveHelper.followDirectionUntilObstacle(Direction.DownRight, board, 1),
+            ...this.moveHelper.followDirectionUntilObstacle(Direction.DownLeft, board, 1),
+            ...this.moveHelper.followDirectionUntilObstacle(Direction.Down, board, 1),
+            ...this.moveHelper.followDirectionUntilObstacle(Direction.Up, board, 1),
+            ...this.moveHelper.followDirectionUntilObstacle(Direction.Left, board, 1),
+            ...this.moveHelper.followDirectionUntilObstacle(Direction.Right, board, 1)
+        )
+
+        return availableMoves
     }
 }
