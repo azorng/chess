@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { Board, BoardPositions } from '~/common/Board'
-import { PieceBase, PieceColor } from '~/common/PieceBase'
+import { Piece, PieceColor } from '~/common/Piece'
 
 Vue.use(Vuex)
 
 interface State {
-    boardPositions: BoardPositions
     currentTurn: PieceColor
+    board: Board
 }
 
 const board = new Board()
@@ -15,25 +15,27 @@ board.start()
 
 export const store = new Vuex.Store({
     state: {
-        boardPositions: board.positions,
-        currentTurn: PieceColor.White
+        currentTurn: PieceColor.White,
+        board
     },
     mutations: {
-        move(state: State, { piece, destination }: { piece: PieceBase; destination: string }) {
-            delete state.boardPositions[piece.position]
-            Vue.set(state.boardPositions, piece.position, undefined)
-
-            delete state.boardPositions[destination]
-            Vue.set(state.boardPositions, destination, piece)
-
-            piece.position = destination
+        move(state: State, { piece, destination }: { piece: Piece; destination: string }) {
+            board.move(piece, destination)
+            triggerReactivity(state.board)
         },
 
         toggleTurn(state: State) {
             state.currentTurn =
                 state.currentTurn == PieceColor.White ? PieceColor.Black : PieceColor.White
-
-                console.log(state.currentTurn)
         }
     }
 })
+
+const triggerReactivity = (...objs: any) => {
+    for (let obj of objs) {
+        if (obj) {
+            Vue.set(obj, 'xxx', undefined)
+            delete obj['xxx']
+        }
+    }
+}

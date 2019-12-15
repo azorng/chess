@@ -1,14 +1,14 @@
-import { PieceBase, PieceName, PieceColor } from '~/common/PieceBase'
+import { Piece, PieceName, PieceColor } from '~/common/Piece'
 import { BoardPositions, Board } from '~/common/Board'
 
-export class Knight extends PieceBase {
+export class Knight extends Piece {
     constructor(color: PieceColor) {
         super()
         this.name = PieceName.Knight
         this.color = color
     }
 
-    availableMoves(board: BoardPositions): string[] | [] {
+    availableMoves(board: BoardPositions): string[] {
         const availableMoves: string[] = []
 
         const iLetter = Board.letters.indexOf(this.position[0])
@@ -28,7 +28,7 @@ export class Knight extends PieceBase {
         }
 
         possibleMoves.forEach(move => {
-            if (this.moveHelper.isValidMove(move, board)) {
+            if (this.moveAssistant.isValidMove(move, board)) {
                 availableMoves.push(move)
             }
         })

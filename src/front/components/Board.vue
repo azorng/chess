@@ -13,36 +13,37 @@ div
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import Piece from '~components/Piece.vue'
 import { store } from '~/front/store'
-import { PieceName } from '~/common/PieceBase'
+import { PieceName, PieceColor } from '~/common/Piece'
 import { Board as BoardObj } from '~/common/Board'
 import _ from 'lodash'
 import $ from 'jquery'
 
 @Component
 export default class Board extends Vue {
-    boardPositions = store.state.boardPositions
+    board = store.state.board
     letters = BoardObj.letters
+    numbers = _.clone(BoardObj.numbers).reverse()
 
-    @Watch('boardPositions')
-    onBoardChange() {
+    @Watch('board')
+    onBoardChange(board: BoardObj) {
         $('.piece').remove()
-        this.renderPositions()
-    }
+        this.renderBoard()
 
-    get numbers() {
-        return _.clone(BoardObj.numbers).reverse()
+        if (board.winner) {
+            alert(PieceColor[board.winner] + 's win!')
+        }
     }
 
     mounted() {
-        this.renderPositions()
+        this.renderBoard()
     }
 
-    renderPositions() {
-        for (const position in this.boardPositions) {
-            const piece = this.boardPositions[position]
+    renderBoard() {
+        for (const position in this.board.positions) {
+            const piece = this.board.positions[position]
             if (piece) {
                 const pieceComponent = new Piece({
-                    data: { piece, positions: this.boardPositions }
+                    data: { piece, positions: this.board.positions }
                 })
                 document.getElementById(position)!.innerHTML = '<div id="z"></div>'
                 pieceComponent.$mount('#z')
@@ -69,10 +70,10 @@ td:after {
     box-sizing: border-box;
 }
 .square-one {
-    background-color: #fff59d;
+    background-color: #ffe0b2;
 }
 .square-two {
-    background-color: #4e342e;
+    background-color: #6d4c41;
 }
 #board {
     position: relative;

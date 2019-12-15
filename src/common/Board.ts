@@ -1,4 +1,4 @@
-import { PieceBase, PieceColor } from '~/common/PieceBase'
+import { Piece, PieceColor, PieceName } from '~/common/Piece'
 import { Queen } from '~/common/pieces/Queen'
 import { King } from '~/common/pieces/King'
 import { Knight } from '~/common/pieces/Knight'
@@ -7,22 +7,47 @@ import { Roock } from '~/common/pieces/Roock'
 import { Pawn } from '~/common/pieces/Pawn'
 import _ from 'lodash'
 
-export type BoardPositions = { [key: string]: PieceBase | undefined }
+export type BoardPositions = { [key: string]: Piece | undefined }
 
 export class Board {
     positions: BoardPositions
-    pieces: PieceBase[]
+    killedPieces: Piece[]
+    winner: PieceColor | undefined
 
     static readonly numbers = ['1', '2', '3', '4', '5', '6', '7', '8']
     static readonly letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
     constructor() {
         this.positions = this.initBoard()
+        this.winner = undefined
+        this.killedPieces = []
     }
 
     public start() {
         this.setPiecesInTheBoard()
         this.letPiecesKnowTheirPosition()
+    }
+
+    public move(piece: Piece, destination: string) {
+        if (!piece.moveAssistant.isAllowedMove(destination, this.positions)) {
+            throw Error('Move is not allowed')
+        }
+
+        const pieceKilled = this.positions[destination]
+        if (pieceKilled) {
+            this.killedPieces.push(pieceKilled)
+            if (pieceKilled.name == PieceName.King) {
+                this.winner = piece.color
+            }
+        }
+
+        this.movePieceToDestination(piece, destination)
+    }
+
+    private movePieceToDestination(piece: Piece, destination: string) {
+        this.positions[piece.position] = undefined
+        this.positions[destination] = piece
+        piece.position = destination
     }
 
     private letPiecesKnowTheirPosition() {
@@ -32,7 +57,6 @@ export class Board {
                 piece.position = position
             }
         }
-        console.log(this.positions)
     }
 
     private setPiecesInTheBoard() {

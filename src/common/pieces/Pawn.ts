@@ -1,18 +1,18 @@
-import { PieceBase, PieceName, PieceColor, Direction } from '~/common/PieceBase'
+import { Piece, PieceName, PieceColor, Direction } from '~/common/Piece'
 import { BoardPositions, Board } from '~/common/Board'
 
-export class Pawn extends PieceBase {
+export class Pawn extends Piece {
     constructor(color: PieceColor) {
         super()
         this.name = PieceName.Pawn
         this.color = color
     }
 
-    availableMoves(board: BoardPositions): string[] | [] {
+    availableMoves(board: BoardPositions): string[] {
         const availableMoves: string[] = []
 
         availableMoves.push(
-            ...this.moveHelper.followDirectionUntilObstacle(
+            ...this.moveAssistant.followDirectionUntilObstacle(
                 this.color == PieceColor.Black ? Direction.Down : Direction.Up,
                 board,
                 this.position[1] == '7' || this.position[1] == '2' ? 2 : 1
@@ -22,12 +22,12 @@ export class Pawn extends PieceBase {
         // Diagonal kill
         const diagonalMoves = this.color == PieceColor.White
             ? [
-                  ...this.moveHelper.followDirectionUntilObstacle(Direction.UpLeft, board, 1),
-                  ...this.moveHelper.followDirectionUntilObstacle(Direction.UpRight, board, 1)
+                  ...this.moveAssistant.followDirectionUntilObstacle(Direction.UpLeft, board, 1),
+                  ...this.moveAssistant.followDirectionUntilObstacle(Direction.UpRight, board, 1)
               ]
             : [
-                  ...this.moveHelper.followDirectionUntilObstacle(Direction.DownLeft, board, 1),
-                  ...this.moveHelper.followDirectionUntilObstacle(Direction.DownRight, board, 1)
+                  ...this.moveAssistant.followDirectionUntilObstacle(Direction.DownLeft, board, 1),
+                  ...this.moveAssistant.followDirectionUntilObstacle(Direction.DownRight, board, 1)
               ]
 
         diagonalMoves.forEach(move => {

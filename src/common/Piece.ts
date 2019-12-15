@@ -1,5 +1,5 @@
 import { BoardPositions } from '~/common/Board'
-import { MoveHelper } from '~/common/MoveHelper'
+import { MoveAssistant } from '~/common/MoveAssistant'
 
 export enum PieceColor {
     Black,
@@ -26,15 +26,15 @@ export enum PieceName {
     Pawn
 }
 
-export abstract class PieceBase {
+export abstract class Piece {
     color: PieceColor
     name: PieceName
     position: string
-    moveHelper: MoveHelper
+    moveAssistant: MoveAssistant
 
     constructor() {
-        this.moveHelper = new MoveHelper(this)
+        this.moveAssistant = new MoveAssistant(this)
     }
 
-    abstract availableMoves(board: BoardPositions): string[] | []
+    abstract availableMoves(board: BoardPositions): string[] 
 }

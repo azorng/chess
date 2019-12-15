@@ -1,11 +1,11 @@
 import { BoardPositions } from '~/common/Board'
-import { Direction, PieceName, PieceBase } from '~/common/PieceBase'
+import { Direction, PieceName, Piece } from '~/common/Piece'
 
 const numbers = ['1', '2', '3', '4', '5', '6', '7', '8']
 const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
-export class MoveHelper {
-    constructor(private piece: PieceBase) {}
+export class MoveAssistant {
+    constructor(private piece: Piece) {}
 
     public followDirectionUntilObstacle(
         direction: Direction,
@@ -96,5 +96,10 @@ export class MoveHelper {
             return true
         }
         return false
+    }
+
+    public isAllowedMove(move: string, board: BoardPositions) {
+        const allAvailableMoves = this.piece.availableMoves(board)
+        return allAvailableMoves.includes(move)
     }
 }

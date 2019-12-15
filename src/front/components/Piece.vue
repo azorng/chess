@@ -6,7 +6,7 @@ div.piece(@click='availableMoves')
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
-import { PieceColor, PieceName, PieceBase } from '~/common/PieceBase'
+import { PieceColor, PieceName, Piece as PieceBase } from '~/common/Piece'
 import { BoardPositions } from '~/common/Board'
 import { store } from '~/front/store'
 import $ from 'jquery'
@@ -25,7 +25,7 @@ export default class Piece extends Vue {
     }
 
     availableMoves() {
-        if (this.piece.color == store.state.currentTurn) {
+        if (this.piece.color == store.state.currentTurn && !store.state.board.winner) {
             this.clearMoves()
             const availableMoves = this.piece.availableMoves(this.positions)
             availableMoves.forEach(move => {
