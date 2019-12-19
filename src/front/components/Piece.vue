@@ -6,18 +6,17 @@ div.piece(@click='availableMoves')
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
-import { PieceColor, PieceName, Piece as PieceBase } from '~/common/Piece'
-import { BoardPositions } from '~/common/Board'
+import { Color, PieceName, Piece as PieceBase } from '~/common/Piece'
+import { Board } from '~/common/Board'
 import { store } from '~/front/store'
 import $ from 'jquery'
 
 @Component
 export default class Piece extends Vue {
     piece: PieceBase
-    positions: BoardPositions
 
     get color() {
-        return PieceColor[this.piece.color]
+        return Color[this.piece.color]
     }
 
     get name() {
@@ -25,9 +24,9 @@ export default class Piece extends Vue {
     }
 
     availableMoves() {
-        if (this.piece.color == store.state.currentTurn && !store.state.board.winner) {
+        if (this.piece.color == store.state.game.currentTurn && !store.state.game.winner) {
             this.clearMoves()
-            const availableMoves = this.piece.availableMoves(this.positions)
+            const availableMoves = this.piece.availableMoves(store.state.game.board)
             availableMoves.forEach(move => {
                 document.getElementById(move)!.classList.add('available-move')
             })
@@ -43,13 +42,12 @@ export default class Piece extends Vue {
             e.stopImmediatePropagation()
             const destination = $(this).attr('id')
             store.commit('move', { piece: self.piece, destination })
-            store.commit('toggleTurn')
             self.clearMoves()
         })
     }
 
     private clearMoves() {
-        for (const position in this.positions) {
+        for (const position in store.state.game.board) {
             document.getElementById(position)!.classList.remove('available-move')
         }
     }
@@ -66,7 +64,7 @@ export default class Piece extends Vue {
 }
 
 .available-move {
-    background-color: red !important;
+    background-color: #cacaca !important;
     cursor: pointer;
 }
 </style>

@@ -1,14 +1,16 @@
-import { Piece, PieceName, PieceColor } from '~/common/Piece'
-import { BoardPositions, Board } from '~/common/Board'
+import { Piece, PieceName, Color } from '~/common/Piece'
+import { Game } from '~/common/Game'
+import { Board } from '~/common/Board'
+
 
 export class Knight extends Piece {
-    constructor(color: PieceColor) {
+    constructor(color: Color) {
         super()
         this.name = PieceName.Knight
         this.color = color
     }
 
-    availableMoves(board: BoardPositions): string[] {
+    availableMoves(board: Board): string[] {
         const availableMoves: string[] = []
 
         const iLetter = Board.letters.indexOf(this.position[0])

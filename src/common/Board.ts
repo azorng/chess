@@ -1,102 +1,103 @@
-import { Piece, PieceColor, PieceName } from '~/common/Piece'
-import { Queen } from '~/common/pieces/Queen'
-import { King } from '~/common/pieces/King'
-import { Knight } from '~/common/pieces/Knight'
-import { Bishop } from '~/common/pieces/Bishop'
-import { Roock } from '~/common/pieces/Roock'
-import { Pawn } from '~/common/pieces/Pawn'
-import _ from 'lodash'
+import { Piece, Color } from '~/common/Piece'
 
-export type BoardPositions = { [key: string]: Piece | undefined }
+export type Position = Piece | undefined
 
 export class Board {
-    positions: BoardPositions
-    killedPieces: Piece[]
-    winner: PieceColor | undefined
+    [index: string]: Position
 
-    static readonly numbers = ['1', '2', '3', '4', '5', '6', '7', '8']
-    static readonly letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+    static numbers = ['1', '2', '3', '4', '5', '6', '7', '8']
+    static letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
-    constructor() {
-        this.positions = this.initBoard()
-        this.winner = undefined
-        this.killedPieces = []
-    }
+    a2: Position = undefined
+    a1: Position = undefined
+    a3: Position = undefined
+    a4: Position = undefined
+    a5: Position = undefined
+    a6: Position = undefined
+    a7: Position = undefined
+    a8: Position = undefined
 
-    public start() {
-        this.setPiecesInTheBoard()
-        this.letPiecesKnowTheirPosition()
-    }
+    b1: Position = undefined
+    b2: Position = undefined
+    b3: Position = undefined
+    b4: Position = undefined
+    b5: Position = undefined
+    b6: Position = undefined
+    b7: Position = undefined
+    b8: Position = undefined
 
-    public move(piece: Piece, destination: string) {
-        if (!piece.moveAssistant.isAllowedMove(destination, this.positions)) {
-            throw Error('Move is not allowed')
-        }
+    c1: Position = undefined
+    c2: Position = undefined
+    c3: Position = undefined
+    c4: Position = undefined
+    c5: Position = undefined
+    c6: Position = undefined
+    c7: Position = undefined
+    c8: Position = undefined
 
-        const pieceKilled = this.positions[destination]
-        if (pieceKilled) {
-            this.killedPieces.push(pieceKilled)
-            if (pieceKilled.name == PieceName.King) {
-                this.winner = piece.color
+    d1: Position = undefined
+    d2: Position = undefined
+    d3: Position = undefined
+    d4: Position = undefined
+    d5: Position = undefined
+    d6: Position = undefined
+    d7: Position = undefined
+    d8: Position = undefined
+
+    e1: Position = undefined
+    e2: Position = undefined
+    e3: Position = undefined
+    e4: Position = undefined
+    e5: Position = undefined
+    e6: Position = undefined
+    e7: Position = undefined
+    e8: Position = undefined
+
+    f1: Position = undefined
+    f2: Position = undefined
+    f3: Position = undefined
+    f4: Position = undefined
+    f5: Position = undefined
+    f6: Position = undefined
+    f7: Position = undefined
+    f8: Position = undefined
+
+    g1: Position = undefined
+    g2: Position = undefined
+    g3: Position = undefined
+    g4: Position = undefined
+    g5: Position = undefined
+    g6: Position = undefined
+    g7: Position = undefined
+    g8: Position = undefined
+
+    h1: Position = undefined
+    h2: Position = undefined
+    h3: Position = undefined
+    h4: Position = undefined
+    h5: Position = undefined
+    h6: Position = undefined
+    h7: Position = undefined
+    h8: Position = undefined
+}
+
+export const BoardUtils = {
+    getAllPiecesInTheBoard(board: Board, color: Color) {
+        const pieces: Piece[] = []
+
+        for (const position in board) {
+            const positionValue = board[position]
+            if (positionValue != undefined && positionValue.color == color) {
+                pieces.push(positionValue)
             }
         }
+        return pieces
+    },
 
-        this.movePieceToDestination(piece, destination)
-    }
-
-    private movePieceToDestination(piece: Piece, destination: string) {
-        this.positions[piece.position] = undefined
-        this.positions[destination] = piece
-        piece.position = destination
-    }
-
-    private letPiecesKnowTheirPosition() {
-        for (const position in this.positions) {
-            const piece = this.positions[position]
-            if (piece) {
-                piece.position = position
-            }
-        }
-    }
-
-    private setPiecesInTheBoard() {
-        this.positions['a8'] = new Roock(PieceColor.Black)
-        this.positions['b8'] = new Knight(PieceColor.Black)
-        this.positions['c8'] = new Bishop(PieceColor.Black)
-        this.positions['d8'] = new Queen(PieceColor.Black)
-        this.positions['e8'] = new King(PieceColor.Black)
-        this.positions['f8'] = new Bishop(PieceColor.Black)
-        this.positions['g8'] = new Knight(PieceColor.Black)
-        this.positions['h8'] = new Roock(PieceColor.Black)
-        this.fillRow('7', Pawn, PieceColor.Black)
-
-        this.positions['a1'] = new Roock(PieceColor.White)
-        this.positions['b1'] = new Knight(PieceColor.White)
-        this.positions['c1'] = new Bishop(PieceColor.White)
-        this.positions['d1'] = new Queen(PieceColor.White)
-        this.positions['e1'] = new King(PieceColor.White)
-        this.positions['f1'] = new Bishop(PieceColor.White)
-        this.positions['g1'] = new Knight(PieceColor.White)
-        this.positions['h1'] = new Roock(PieceColor.White)
-        this.fillRow('2', Pawn, PieceColor.White)
-    }
-
-    private fillRow(rowNumber: string, piece: any, color: PieceColor) {
-        const positions = this.positions
+    fillRow(board: Board, rowNumber: string, piece: any, color: Color) {
+        const positions = board
         Board.letters.forEach(letter => {
             positions[letter + rowNumber] = new piece(color)
         })
-    }
-
-    private initBoard() {
-        const board: BoardPositions = {}
-
-        Board.letters.forEach(letter => {
-            Board.numbers.forEach(number => {
-                board[letter + number] = undefined
-            })
-        })
-
-        return board
     }
 }

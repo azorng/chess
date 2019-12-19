@@ -1,14 +1,14 @@
-import { Piece, PieceName, PieceColor, Direction } from '~/common/Piece'
-import { BoardPositions } from '~/common/Board'
+import { Piece, PieceName, Color, Direction } from '~/common/Piece'
+import { Board } from '~/common/Board'
 
 export class Roock extends Piece {
-    constructor(color: PieceColor) {
+    constructor(color: Color) {
         super()
         this.name = PieceName.Roock
         this.color = color
     }
 
-    availableMoves(board: BoardPositions): string[] {
+    availableMoves(board: Board): string[] {
         const availableMoves: string[] = []
 
         availableMoves.push(...this.moveAssistant.followDirectionUntilObstacle(Direction.Down, board))

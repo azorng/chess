@@ -1,14 +1,14 @@
-import { Piece, PieceName, PieceColor, Direction } from '~/common/Piece'
-import { BoardPositions } from '~/common/Board'
+import { Piece, PieceName, Color, Direction } from '~/common/Piece'
+import { Board } from '~/common/Board'
 
 export class Bishop extends Piece {
-    constructor(color: PieceColor) {
+    constructor(color: Color) {
         super()
         this.name = PieceName.Bishop
         this.color = color
     }
 
-    availableMoves(board: BoardPositions): string[] {
+    availableMoves(board: Board): string[] {
         const availableMoves: string[] = []
 
         availableMoves.push(

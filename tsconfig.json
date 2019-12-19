@@ -19,8 +19,8 @@
     ],
     "strict": true,
     "esModuleInterop": true, 
-    "strictPropertyInitialization": false
- 
+    "strictPropertyInitialization": false,
+    "strictNullChecks": false,
   },
   "include": [
     "src"

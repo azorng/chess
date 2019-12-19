@@ -1,15 +1,13 @@
-import { BoardPositions } from '~/common/Board'
-import { Direction, PieceName, Piece } from '~/common/Piece'
-
-const numbers = ['1', '2', '3', '4', '5', '6', '7', '8']
-const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+import { Game } from '~/common/Game'
+import { Direction, PieceName, Piece, Color } from '~/common/Piece'
+import { Board, BoardUtils } from '~/common/Board'
 
 export class MoveAssistant {
-    constructor(private piece: Piece) {}
+    constructor(private piece: Piece = undefined) {}
 
     public followDirectionUntilObstacle(
         direction: Direction,
-        positions: BoardPositions,
+        positions: Board,
         squares = 7
     ) {
         let squaresLeft = squares
@@ -48,19 +46,19 @@ export class MoveAssistant {
 
     private calculateNextMove(direction: Direction, lastMove: string): string {
         if (direction == Direction.Up) {
-            return lastMove[0] + numbers[numbers.indexOf(lastMove[1]) + 1]
+            return lastMove[0] + Board.numbers[Board.numbers.indexOf(lastMove[1]) + 1]
         }
 
         if (direction == Direction.Down) {
-            return lastMove[0] + numbers[numbers.indexOf(lastMove[1]) - 1]
+            return lastMove[0] + Board.numbers[Board.numbers.indexOf(lastMove[1]) - 1]
         }
 
         if (direction == Direction.Right) {
-            return letters[letters.indexOf(lastMove[0]) + 1] + lastMove[1]
+            return Board.letters[Board.letters.indexOf(lastMove[0]) + 1] + lastMove[1]
         }
 
         if (direction == Direction.Left) {
-            return letters[letters.indexOf(lastMove[0]) - 1] + lastMove[1]
+            return Board.letters[Board.letters.indexOf(lastMove[0]) - 1] + lastMove[1]
         }
 
         if (direction == Direction.UpRight) {
@@ -86,10 +84,11 @@ export class MoveAssistant {
         return ''
     }
 
-    public isValidMove(move: string, board: BoardPositions) {
+    public isValidMove(move: string, board: Board) {
         if (
             move.length == 2 &&
-            letters.includes(move[0]) && numbers.includes(move[1]) && // Is valid cell
+            Board.letters.includes(move[0]) &&
+            Board.numbers.includes(move[1]) && // Is valid cell
             ((board[move] != undefined && board[move]?.color != this.piece.color) || // Is not ally
                 board[move] == undefined) // Is free cell
         ) {
@@ -98,8 +97,17 @@ export class MoveAssistant {
         return false
     }
 
-    public isAllowedMove(move: string, board: BoardPositions) {
+    public isAllowedMove(move: string, board: Board) {
         const allAvailableMoves = this.piece.availableMoves(board)
         return allAvailableMoves.includes(move)
+    }
+
+    public getAllAvailableMovesFromPlayer(game: Game, color: Color) {
+        const allPieces = BoardUtils.getAllPiecesInTheBoard(game.board, color)
+        const allAvailableMoves = []
+        for (const piece of allPieces) {
+            allAvailableMoves.push(...piece.availableMoves(game.board))
+        }
+        return [...new Set(allAvailableMoves)]
     }
 }

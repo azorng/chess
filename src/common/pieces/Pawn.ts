@@ -1,26 +1,25 @@
-import { Piece, PieceName, PieceColor, Direction } from '~/common/Piece'
-import { BoardPositions, Board } from '~/common/Board'
+import { Piece, PieceName, Color, Direction } from '~/common/Piece'
+import { Board } from '~/common/Board'
 
 export class Pawn extends Piece {
-    constructor(color: PieceColor) {
+    constructor(color: Color) {
         super()
         this.name = PieceName.Pawn
         this.color = color
     }
 
-    availableMoves(board: BoardPositions): string[] {
+    availableMoves(board: Board): string[] {
         const availableMoves: string[] = []
-
         availableMoves.push(
             ...this.moveAssistant.followDirectionUntilObstacle(
-                this.color == PieceColor.Black ? Direction.Down : Direction.Up,
+                this.color == Color.Black ? Direction.Down : Direction.Up,
                 board,
                 this.position[1] == '7' || this.position[1] == '2' ? 2 : 1
             )
         )
 
         // Diagonal kill
-        const diagonalMoves = this.color == PieceColor.White
+        const diagonalMoves = this.color == Color.White
             ? [
                   ...this.moveAssistant.followDirectionUntilObstacle(Direction.UpLeft, board, 1),
                   ...this.moveAssistant.followDirectionUntilObstacle(Direction.UpRight, board, 1)

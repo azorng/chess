@@ -1,7 +1,8 @@
-import { BoardPositions } from '~/common/Board'
+import { Board } from '~/common/Board'
 import { MoveAssistant } from '~/common/MoveAssistant'
+import uuid from 'uuid'
 
-export enum PieceColor {
+export enum Color {
     Black,
     White
 }
@@ -27,14 +28,16 @@ export enum PieceName {
 }
 
 export abstract class Piece {
-    color: PieceColor
+    color: Color
     name: PieceName
     position: string
     moveAssistant: MoveAssistant
+    id: string
 
     constructor() {
         this.moveAssistant = new MoveAssistant(this)
+        this.id = uuid()
     }
 
-    abstract availableMoves(board: BoardPositions): string[] 
+    abstract availableMoves(board: Board): string[] 
 }

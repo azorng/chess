@@ -13,24 +13,33 @@ div
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import Piece from '~components/Piece.vue'
 import { store } from '~/front/store'
-import { PieceName, PieceColor } from '~/common/Piece'
+import { PieceName, Color } from '~/common/Piece'
 import { Board as BoardObj } from '~/common/Board'
+import { Game } from '~/common/Game'
 import _ from 'lodash'
 import $ from 'jquery'
 
 @Component
 export default class Board extends Vue {
-    board = store.state.board
-    letters = BoardObj.letters
-    numbers = _.clone(BoardObj.numbers).reverse()
+    game = store.state.game
+    letters = [...BoardObj.letters]
+    numbers = [...BoardObj.numbers].reverse()
 
-    @Watch('board')
-    onBoardChange(board: BoardObj) {
+    @Watch('game')
+    onGameChange(game: Game) {
         $('.piece').remove()
         this.renderBoard()
 
-        if (board.winner) {
-            alert(PieceColor[board.winner] + 's win!')
+        if (game.winner !== false) {
+            alert(Color[game.winner] + 's win!')
+        }
+
+        if (game.onCheck !== false) {
+            alert('Check to: ' + Color[game.onCheck] + ' king.')
+        }
+
+        if (game.onCheckMate !== false) {
+            alert('Check mate to: ' + Color[game.onCheckMate] + ' king')
         }
     }
 
@@ -39,11 +48,11 @@ export default class Board extends Vue {
     }
 
     renderBoard() {
-        for (const position in this.board.positions) {
-            const piece = this.board.positions[position]
+        for (const position in this.game.board) {
+            const piece = this.game.board[position]
             if (piece) {
                 const pieceComponent = new Piece({
-                    data: { piece, positions: this.board.positions }
+                    data: { piece }
                 })
                 document.getElementById(position)!.innerHTML = '<div id="z"></div>'
                 pieceComponent.$mount('#z')
