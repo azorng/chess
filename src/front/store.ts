@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { Game } from '~/common/Game'
-import { Piece } from '~/common/Piece'
+import { Game } from '~/chess/Game'
+import { Piece } from '~/chess/Piece'
 
 Vue.use(Vuex)
 

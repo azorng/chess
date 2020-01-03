@@ -1,13 +1,12 @@
 <template lang="pug">
 div.piece(@click='availableMoves')
-    .position {{ piece.position }}
     img(:src='`/pieces/${color}_${name}.svg`')
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
-import { Color, PieceName, Piece as PieceBase } from '~/common/Piece'
-import { Board } from '~/common/Board'
+import { Color, PieceName, Piece as PieceBase } from '~/chess/Piece'
+import { Board } from '~/chess/Board'
 import { store } from '~/front/store'
 import $ from 'jquery'
 
@@ -24,7 +23,7 @@ export default class Piece extends Vue {
     }
 
     availableMoves() {
-        if (this.piece.color == store.state.game.currentTurn && !store.state.game.winner) {
+        if (this.piece.color == store.state.game.currentTurn) {
             this.clearMoves()
             const availableMoves = this.piece.availableMoves(store.state.game.board)
             availableMoves.forEach(move => {
@@ -55,16 +54,18 @@ export default class Piece extends Vue {
 </script>
 
 <style>
-.position {
-    position: absolute;
-}
-
 .piece {
     cursor: pointer;
+    position: absolute;
+    width: 12.22%;
+}
+
+.piece img {
+    width: 100%;
 }
 
 .available-move {
-    background-color: #cacaca !important;
+    background-color: #212121 !important;
     cursor: pointer;
 }
 </style>

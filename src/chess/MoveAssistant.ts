@@ -1,6 +1,6 @@
-import { Game } from '~/common/Game'
-import { Direction, PieceName, Piece, Color } from '~/common/Piece'
-import { Board, BoardUtils } from '~/common/Board'
+import { Direction, PieceName, Piece, Color } from '~/chess/Piece'
+import { Board } from '~/chess/Board'
+import { BoardUtils } from '~/chess/BoardUtils'
 
 export class MoveAssistant {
     constructor(private piece: Piece = undefined) {}
@@ -102,11 +102,11 @@ export class MoveAssistant {
         return allAvailableMoves.includes(move)
     }
 
-    public getAllAvailableMovesFromPlayer(game: Game, color: Color) {
-        const allPieces = BoardUtils.getAllPiecesInTheBoard(game.board, color)
+    public static getAllAvailableMovesFromPlayer(board: Board, color: Color) {
+        const allPieces = BoardUtils.getAllPiecesInTheBoard(board, color)
         const allAvailableMoves = []
         for (const piece of allPieces) {
-            allAvailableMoves.push(...piece.availableMoves(game.board))
+            allAvailableMoves.push(...piece.availableMoves(board))
         }
         return [...new Set(allAvailableMoves)]
     }

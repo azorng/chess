@@ -1,5 +1,5 @@
-import { Board } from '~/common/Board'
-import { MoveAssistant } from '~/common/MoveAssistant'
+import { Board } from '~/chess/Board'
+import { MoveAssistant } from '~/chess/MoveAssistant'
 import uuid from 'uuid'
 
 export enum Color {

@@ -1,8 +1,8 @@
-import { Game } from '~/common/Game'
-import { Board } from '~/common/Board'
-import { Piece, PieceName } from '~/common/Piece'
+import { Game } from '~/chess/Game'
+import { Board } from '~/chess/Board'
+import { Piece, PieceName } from '~/chess/Piece'
 import _ from 'lodash'
-import { GameVerificator } from '~/common/GameVerificator'
+import { GameVerificator } from '~/chess/GameVerificator'
 
 export class OnMoveEvent {
     latestBoardHistory: Board
@@ -22,20 +22,17 @@ export class OnMoveEvent {
         const pieceKilled = this.latestBoardHistory[this.movedPiece.position]
         if (pieceKilled) {
             this.game.cemetery.push(pieceKilled)
-            if (pieceKilled.name == PieceName.King) {
-                this.game.winner = this.movedPiece.color
-            }
         }
     }
 
     private onCheck() {
-        if (GameVerificator.isOnCheck(this.game, this.game.currentTurn)) {
-            this.game.onCheck = this.game.oppositeTurn
+        if (GameVerificator.isOnCheck(this.game.board, this.game.currentTurn)) {
+            this.game.isOnCheck = this.game.oppositeTurn
             if (GameVerificator.isOnCheckMate(this.game)) {
-                this.game.onCheckMate = this.game.oppositeTurn
+                this.game.isOnCheckMate = this.game.oppositeTurn
             }
         } else {
-            this.game.onCheck = false
+            this.game.isOnCheck = false
             this.game.checkMoves = undefined
         }
     }

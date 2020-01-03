@@ -1,15 +1,16 @@
-import { MoveAssistant } from '~/common/MoveAssistant'
-import { PieceName, Color } from '~/common/Piece'
-import { Game } from '~/common/Game'
-import { BoardUtils } from '~/common/Board'
+import { MoveAssistant } from '~/chess/MoveAssistant'
+import { PieceName, Color } from '~/chess/Piece'
+import { Game } from '~/chess/Game'
+import { BoardUtils } from '~/chess/BoardUtils'
 import _ from 'lodash'
+import { Board } from '~/chess/Board'
 
 export class GameVerificator {
-    public static isOnCheck(game: Game, turn: Color) {
-        const allAvailableMoves = new MoveAssistant().getAllAvailableMovesFromPlayer(game, turn)
+    public static isOnCheck(board: Board, turn: Color) {
+        const allAvailableMoves = MoveAssistant.getAllAvailableMovesFromPlayer(board, turn)
 
         for (const move of allAvailableMoves) {
-            const positionValue = game.board[move]
+            const positionValue = board[move]
             if (positionValue != undefined && positionValue.name == PieceName.King) {
                 return true
             }
@@ -28,7 +29,7 @@ export class GameVerificator {
             const moves = piece.availableMoves(dreamGame.board)
             for (const move of moves) {
                 dreamGame.movePieceToDestination(_.clone(piece), move)
-                if (!GameVerificator.isOnCheck(dreamGame, game.currentTurn)) {
+                if (!GameVerificator.isOnCheck(dreamGame.board, game.currentTurn)) {
                     if (allowedMoves[piece.id]) {
                         allowedMoves[piece.id].push(move)
                     } else {
@@ -47,6 +48,8 @@ export class GameVerificator {
                 movesById: allowedMoves
             }
         }
+
+        console.log(allowedMoves)
 
         return isCheckMate
     }

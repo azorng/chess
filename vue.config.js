@@ -9,12 +9,6 @@ module.exports = {
 
     chainWebpack: config => {
         config
-            .plugin('fork-ts-checker')
-            .use(require('fork-ts-checker-webpack-plugin'), [{
-                tsconfig: 'tsconfig.front.json',
-            }])
-
-        config
             .plugin('html')
             .tap(args => {
                 args[0].template = 'src/front/public/index.html'

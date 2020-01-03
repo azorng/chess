@@ -1,5 +1,5 @@
-import { Piece, PieceName, Color, Direction } from '~/common/Piece'
-import { Board } from '~/common/Board'
+import { Piece, PieceName, Color, Direction } from '~/chess/Piece'
+import { Board } from '~/chess/Board'
 
 export class Queen extends Piece {
     constructor(color: Color) {

@@ -1,16 +1,16 @@
 <template lang="pug">
   #app
-    Board
+    Game
 
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator"
-import Board from "~components/Board.vue"
+import Game from "~components/Game.vue"
 
 @Component({
   components: {
-    Board
+    Game
   }
 })
 export default class App extends Vue {}
@@ -23,6 +23,7 @@ export default class App extends Vue {}
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: white;
 }
 
 i {
@@ -38,5 +39,6 @@ html {
 body {
   margin: 0;
   padding: 0;
+  background-color: #212121;
 }
 </style>

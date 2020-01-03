@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "outDir": "dist", 
     "target": "es2018", 
     "module": "commonjs", 
     "baseUrl": ".", /* Base directory to resolve non-absolute module names. */
@@ -19,6 +20,7 @@
     ],
     "strict": true,
     "esModuleInterop": true, 
+    "experimentalDecorators": true,
     "strictPropertyInitialization": false,
     "strictNullChecks": false,
   },

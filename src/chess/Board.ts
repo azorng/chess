@@ -1,4 +1,4 @@
-import { Piece, Color } from '~/common/Piece'
+import { Piece } from '~/chess/Piece'
 
 export type Position = Piece | undefined
 
@@ -79,25 +79,4 @@ export class Board {
     h6: Position = undefined
     h7: Position = undefined
     h8: Position = undefined
-}
-
-export const BoardUtils = {
-    getAllPiecesInTheBoard(board: Board, color: Color) {
-        const pieces: Piece[] = []
-
-        for (const position in board) {
-            const positionValue = board[position]
-            if (positionValue != undefined && positionValue.color == color) {
-                pieces.push(positionValue)
-            }
-        }
-        return pieces
-    },
-
-    fillRow(board: Board, rowNumber: string, piece: any, color: Color) {
-        const positions = board
-        Board.letters.forEach(letter => {
-            positions[letter + rowNumber] = new piece(color)
-        })
-    }
 }

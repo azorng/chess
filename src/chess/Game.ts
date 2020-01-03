@@ -1,14 +1,15 @@
-import { Piece, Color } from '~/common/Piece'
-import { Queen } from '~/common/pieces/Queen'
-import { King } from '~/common/pieces/King'
-import { Knight } from '~/common/pieces/Knight'
-import { Bishop } from '~/common/pieces/Bishop'
-import { Roock } from '~/common/pieces/Roock'
-import { Pawn } from '~/common/pieces/Pawn'
+import { Piece, Color } from '~/chess/Piece'
+import { Queen } from '~/chess/pieces/Queen'
+import { King } from '~/chess/pieces/King'
+import { Knight } from '~/chess/pieces/Knight'
+import { Bishop } from '~/chess/pieces/Bishop'
+import { Roock } from '~/chess/pieces/Roock'
+import { Pawn } from '~/chess/pieces/Pawn'
+import { OnMoveEvent } from '~/chess/OnMoveEvent'
+import { Board } from '~/chess/Board'
+import { BoardUtils } from '~/chess/BoardUtils'
+import { GameVerificator } from '~/chess/GameVerificator'
 import _ from 'lodash'
-import { OnMoveEvent } from '~/common/OnMoveEvent'
-import { Board, BoardUtils } from '~/common/Board'
-import { GameVerificator } from '~/common/GameVerificator'
 
 export interface AllowedMoves {
     color: Color
@@ -20,17 +21,15 @@ export class Game {
     cemetery: Piece[]
     history: Board[]
     currentTurn: Color
-    winner: Color | false
-    onCheck: Color | false
-    onCheckMate: Color | false
+    isOnCheck: Color | false
+    isOnCheckMate: Color | false
 
     checkMoves: AllowedMoves | undefined
 
     constructor() {
-        this.winner = false
-        this.onCheck = false
+        this.isOnCheck = false
         this.currentTurn = Color.White
-        this.onCheckMate = false
+        this.isOnCheckMate = false
         this.board = new Board()
         this.cemetery = []
         this.history = []
@@ -76,7 +75,7 @@ export class Game {
 
         const dreamBoard = _.cloneDeep(this)
         dreamBoard.movePieceToDestination(_.clone(piece), destination)
-        if (GameVerificator.isOnCheck(dreamBoard, this.oppositeTurn)) {
+        if (GameVerificator.isOnCheck(dreamBoard.board, this.oppositeTurn)) {
             throw Error("Can't move here, king could be killed.")
         }
     }

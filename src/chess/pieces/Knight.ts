@@ -1,6 +1,6 @@
-import { Piece, PieceName, Color } from '~/common/Piece'
-import { Game } from '~/common/Game'
-import { Board } from '~/common/Board'
+import { Piece, PieceName, Color } from '~/chess/Piece'
+import { Game } from '~/chess/Game'
+import { Board } from '~/chess/Board'
 
 
 export class Knight extends Piece {
