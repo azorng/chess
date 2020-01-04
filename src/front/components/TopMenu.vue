@@ -1,6 +1,8 @@
 <template lang="pug">
 div
-    #top-menu Current turn: #[.turn(attribute='value') {{ turn }}] 
+    #top-menu 
+        #winner(v-if='winner !== undefined') {{ winner }} wins the game.
+        div(v-else) Current turn: #[.turn(attribute='value') {{ turn }}] 
 
 </template>
 
@@ -11,26 +13,34 @@ import { store } from '~/front/store'
 
 @Component
 export default class TopMenu extends Vue {
+    game = store.state.game
 
-    get turn() {
-        return Color[store.state.game.currentTurn]
+    get winner() {
+        return this.game.isCheckMate !== false ? Color[this.game.oppositeTurn] : undefined
     }
 
+    get turn() {
+        return Color[this.game.currentTurn]
+    }
 }
 </script>
 
 <style scoped>
 #top-menu {
     position: relative;
-    height: 50px;
+    height: 40px;
     text-align: center;
-    padding-top: 14px;
+    padding-top: 20px;
 }
 
 .turn {
     display: inline;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
 }
 
+#winner {
+    font-weight: bold;
+    font-size: 20px;
+}
 </style>

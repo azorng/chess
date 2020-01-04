@@ -1,4 +1,4 @@
-import { Piece, PieceName, Color, Direction } from '~/chess/Piece'
+import { Piece, PieceName, Color, MoveDirection } from '~/chess/Piece'
 import { Board } from '~/chess/Board'
 
 export class King extends Piece {
@@ -12,14 +12,14 @@ export class King extends Piece {
         const availableMoves: string[] = []
 
         availableMoves.push(
-            ...this.moveAssistant.followDirectionUntilObstacle(Direction.UpRight, board, 1),
-            ...this.moveAssistant.followDirectionUntilObstacle(Direction.UpLeft, board, 1),
-            ...this.moveAssistant.followDirectionUntilObstacle(Direction.DownRight, board, 1),
-            ...this.moveAssistant.followDirectionUntilObstacle(Direction.DownLeft, board, 1),
-            ...this.moveAssistant.followDirectionUntilObstacle(Direction.Down, board, 1),
-            ...this.moveAssistant.followDirectionUntilObstacle(Direction.Up, board, 1),
-            ...this.moveAssistant.followDirectionUntilObstacle(Direction.Left, board, 1),
-            ...this.moveAssistant.followDirectionUntilObstacle(Direction.Right, board, 1)
+            ...this.moveAssistant.followDirectionUntilObstacle(MoveDirection.UpRight, board, 1),
+            ...this.moveAssistant.followDirectionUntilObstacle(MoveDirection.UpLeft, board, 1),
+            ...this.moveAssistant.followDirectionUntilObstacle(MoveDirection.DownRight, board, 1),
+            ...this.moveAssistant.followDirectionUntilObstacle(MoveDirection.DownLeft, board, 1),
+            ...this.moveAssistant.followDirectionUntilObstacle(MoveDirection.Down, board, 1),
+            ...this.moveAssistant.followDirectionUntilObstacle(MoveDirection.Up, board, 1),
+            ...this.moveAssistant.followDirectionUntilObstacle(MoveDirection.Left, board, 1),
+            ...this.moveAssistant.followDirectionUntilObstacle(MoveDirection.Right, board, 1)
         )
 
         return availableMoves

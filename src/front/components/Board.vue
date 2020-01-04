@@ -21,25 +21,34 @@ import $ from 'jquery'
 export default class Board extends Vue {
     game = store.state.game
     letters = [...BoardObj.letters]
-    numbers = [...BoardObj.numbers].reverse()
+    numbers = [...BoardObj.numbers].reverse() // Spread operator to avoid reference change
+
+    @Watch('game')
+    onGameChange() {
+        this.renderBoard()
+    }
 
     mounted() {
         this.renderBoard()
     }
 
     renderBoard() {
-        $('.piece').remove()
+        this.cleanBoard()
 
         for (const position in this.game.board) {
             const piece = this.game.board[position]
-            if (piece) {
+            if (piece !== undefined) {
                 const pieceComponent = new Piece({
                     data: { piece }
                 })
-                document.getElementById(position)!.innerHTML = '<div id="z"></div>'
+                $(`#${position}`).html('<div id="z"></div>')
                 pieceComponent.$mount('#z')
             }
         }
+    }
+
+    cleanBoard() {
+        $('.piece').remove()
     }
 }
 </script>
@@ -54,7 +63,7 @@ td:after {
     border-spacing: 0;
     margin: auto;
     width: 100%;
-    max-width: 75vh;
+    max-width: 85vh;
     position: relative;
     box-sizing: border-box;
 }

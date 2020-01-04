@@ -1,4 +1,4 @@
-import { Piece, PieceName, Color, Direction } from '~/chess/Piece'
+import { Piece, PieceName, Color, MoveDirection } from '~/chess/Piece'
 import { Board } from '~/chess/Board'
 
 export class Roock extends Piece {
@@ -11,10 +11,10 @@ export class Roock extends Piece {
     availableMoves(board: Board): string[] {
         const availableMoves: string[] = []
 
-        availableMoves.push(...this.moveAssistant.followDirectionUntilObstacle(Direction.Down, board))
-        availableMoves.push(...this.moveAssistant.followDirectionUntilObstacle(Direction.Up, board))
-        availableMoves.push(...this.moveAssistant.followDirectionUntilObstacle(Direction.Right, board))
-        availableMoves.push(...this.moveAssistant.followDirectionUntilObstacle(Direction.Left, board))
+        availableMoves.push(...this.moveAssistant.followDirectionUntilObstacle(MoveDirection.Down, board))
+        availableMoves.push(...this.moveAssistant.followDirectionUntilObstacle(MoveDirection.Up, board))
+        availableMoves.push(...this.moveAssistant.followDirectionUntilObstacle(MoveDirection.Right, board))
+        availableMoves.push(...this.moveAssistant.followDirectionUntilObstacle(MoveDirection.Left, board))
 
         return availableMoves
     }

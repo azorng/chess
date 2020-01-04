@@ -1,4 +1,4 @@
-import { Piece, PieceName, Color, Direction } from '~/chess/Piece'
+import { Piece, PieceName, Color, MoveDirection } from '~/chess/Piece'
 import { Board } from '~/chess/Board'
 
 export class Pawn extends Piece {
@@ -12,7 +12,7 @@ export class Pawn extends Piece {
         const availableMoves: string[] = []
         availableMoves.push(
             ...this.moveAssistant.followDirectionUntilObstacle(
-                this.color == Color.Black ? Direction.Down : Direction.Up,
+                this.color == Color.Black ? MoveDirection.Down : MoveDirection.Up,
                 board,
                 this.position[1] == '7' || this.position[1] == '2' ? 2 : 1
             )
@@ -21,16 +21,17 @@ export class Pawn extends Piece {
         // Diagonal kill
         const diagonalMoves = this.color == Color.White
             ? [
-                  ...this.moveAssistant.followDirectionUntilObstacle(Direction.UpLeft, board, 1),
-                  ...this.moveAssistant.followDirectionUntilObstacle(Direction.UpRight, board, 1)
+                  ...this.moveAssistant.followDirectionUntilObstacle(MoveDirection.UpLeft, board, 1),
+                  ...this.moveAssistant.followDirectionUntilObstacle(MoveDirection.UpRight, board, 1)
               ]
             : [
-                  ...this.moveAssistant.followDirectionUntilObstacle(Direction.DownLeft, board, 1),
-                  ...this.moveAssistant.followDirectionUntilObstacle(Direction.DownRight, board, 1)
+                  ...this.moveAssistant.followDirectionUntilObstacle(MoveDirection.DownLeft, board, 1),
+                  ...this.moveAssistant.followDirectionUntilObstacle(MoveDirection.DownRight, board, 1)
               ]
 
         diagonalMoves.forEach(move => {
-            if (board[move] != undefined && board[move]?.color != this.color) {
+            // Move is valid and there is an enemy is in the target cell
+            if (this.moveAssistant.isValidMove(move, board) && board[move] !== undefined) {
                 availableMoves.push(move)
             }
         })

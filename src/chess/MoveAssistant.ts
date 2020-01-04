@@ -1,4 +1,4 @@
-import { Direction, PieceName, Piece, Color } from '~/chess/Piece'
+import { MoveDirection, PieceName, Piece, Color } from '~/chess/Piece'
 import { Board } from '~/chess/Board'
 import { BoardUtils } from '~/chess/BoardUtils'
 
@@ -6,7 +6,7 @@ export class MoveAssistant {
     constructor(private piece: Piece = undefined) {}
 
     public followDirectionUntilObstacle(
-        direction: Direction,
+        direction: MoveDirection,
         positions: Board,
         squares = 7
     ) {
@@ -28,7 +28,7 @@ export class MoveAssistant {
                 if (this.piece.name != PieceName.Pawn) {
                     availableMoves.push(nextMove)
                 } else {
-                    if (![Direction.Up, Direction.Down].includes(direction)) {
+                    if (![MoveDirection.Up, MoveDirection.Down].includes(direction)) {
                         availableMoves.push(nextMove)
                     }
                 }
@@ -44,57 +44,54 @@ export class MoveAssistant {
         return availableMoves
     }
 
-    private calculateNextMove(direction: Direction, lastMove: string): string {
-        if (direction == Direction.Up) {
+    private calculateNextMove(direction: MoveDirection, lastMove: string): string {
+        if (direction == MoveDirection.Up) {
             return lastMove[0] + Board.numbers[Board.numbers.indexOf(lastMove[1]) + 1]
         }
 
-        if (direction == Direction.Down) {
+        if (direction == MoveDirection.Down) {
             return lastMove[0] + Board.numbers[Board.numbers.indexOf(lastMove[1]) - 1]
         }
 
-        if (direction == Direction.Right) {
+        if (direction == MoveDirection.Right) {
             return Board.letters[Board.letters.indexOf(lastMove[0]) + 1] + lastMove[1]
         }
 
-        if (direction == Direction.Left) {
+        if (direction == MoveDirection.Left) {
             return Board.letters[Board.letters.indexOf(lastMove[0]) - 1] + lastMove[1]
         }
 
-        if (direction == Direction.UpRight) {
-            const up = this.calculateNextMove(Direction.Up, lastMove)
-            return this.calculateNextMove(Direction.Right, up)
+        if (direction == MoveDirection.UpRight) {
+            const up = this.calculateNextMove(MoveDirection.Up, lastMove)
+            return this.calculateNextMove(MoveDirection.Right, up)
         }
 
-        if (direction == Direction.UpLeft) {
-            const up = this.calculateNextMove(Direction.Up, lastMove)
-            return this.calculateNextMove(Direction.Left, up)
+        if (direction == MoveDirection.UpLeft) {
+            const up = this.calculateNextMove(MoveDirection.Up, lastMove)
+            return this.calculateNextMove(MoveDirection.Left, up)
         }
 
-        if (direction == Direction.DownRight) {
-            const down = this.calculateNextMove(Direction.Down, lastMove)
-            return this.calculateNextMove(Direction.Right, down)
+        if (direction == MoveDirection.DownRight) {
+            const down = this.calculateNextMove(MoveDirection.Down, lastMove)
+            return this.calculateNextMove(MoveDirection.Right, down)
         }
 
-        if (direction == Direction.DownLeft) {
-            const down = this.calculateNextMove(Direction.Down, lastMove)
-            return this.calculateNextMove(Direction.Left, down)
+        if (direction == MoveDirection.DownLeft) {
+            const down = this.calculateNextMove(MoveDirection.Down, lastMove)
+            return this.calculateNextMove(MoveDirection.Left, down)
         }
 
         return ''
     }
 
     public isValidMove(move: string, board: Board) {
-        if (
+        return (
             move.length == 2 &&
             Board.letters.includes(move[0]) &&
             Board.numbers.includes(move[1]) && // Is valid cell
-            ((board[move] != undefined && board[move]?.color != this.piece.color) || // Is not ally
-                board[move] == undefined) // Is free cell
-        ) {
-            return true
-        }
-        return false
+            ((board[move] !== undefined && board[move]?.color != this.piece.color) || // Is not ally
+                board[move] === undefined) // Is free cell
+        )
     }
 
     public isAllowedMove(move: string, board: Board) {

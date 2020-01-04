@@ -7,7 +7,7 @@ export enum Color {
     White
 }
 
-export enum Direction {
+export enum MoveDirection {
     Up,
     Down,
     Left,

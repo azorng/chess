@@ -1,14 +1,14 @@
 import { Game } from '~/chess/Game'
 import { Board } from '~/chess/Board'
-import { Piece, PieceName } from '~/chess/Piece'
+import { Piece } from '~/chess/Piece'
 import _ from 'lodash'
-import { GameVerificator } from '~/chess/GameVerificator'
+import { Check } from '~/chess/Check'
 
 export class OnMoveEvent {
-    latestBoardHistory: Board
+    latestBoardState: Board
 
     constructor(private game: Game, private movedPiece: Piece) {
-        this.latestBoardHistory = game.history[game.history.length - 1]
+        this.latestBoardState = game.history[game.history.length - 1]
         this.onPieceKilled()
         this.onCheck()
         this.toggleTurn()
@@ -19,21 +19,21 @@ export class OnMoveEvent {
     }
 
     private onPieceKilled() {
-        const pieceKilled = this.latestBoardHistory[this.movedPiece.position]
+        const pieceKilled = this.latestBoardState[this.movedPiece.position]
         if (pieceKilled) {
             this.game.cemetery.push(pieceKilled)
         }
     }
 
     private onCheck() {
-        if (GameVerificator.isOnCheck(this.game.board, this.game.currentTurn)) {
-            this.game.isOnCheck = this.game.oppositeTurn
-            if (GameVerificator.isOnCheckMate(this.game)) {
-                this.game.isOnCheckMate = this.game.oppositeTurn
+        if (Check.isInCheck(this.game.board, this.game.currentTurn)) {
+            this.game.isCheck = this.game.oppositeTurn
+            if (Check.isInCheckMate(this.game)) {
+                this.game.isCheckMate = this.game.oppositeTurn
             }
         } else {
-            this.game.isOnCheck = false
-            this.game.checkMoves = undefined
+            this.game.isCheck = false
+            Check.movesAllowedByCheckedPlayer = undefined
         }
     }
 }

@@ -5,8 +5,15 @@ import { BoardUtils } from '~/chess/BoardUtils'
 import _ from 'lodash'
 import { Board } from '~/chess/Board'
 
-export class GameVerificator {
-    public static isOnCheck(board: Board, turn: Color) {
+interface AllowedMoves {
+    color: Color
+    movesById: { [index: string]: string[] }
+}
+
+export class Check {
+    public static movesAllowedByCheckedPlayer: AllowedMoves | undefined = undefined
+
+    public static isInCheck(board: Board, turn: Color) {
         const allAvailableMoves = MoveAssistant.getAllAvailableMovesFromPlayer(board, turn)
 
         for (const move of allAvailableMoves) {
@@ -19,22 +26,20 @@ export class GameVerificator {
         return false
     }
 
-    public static isOnCheckMate(game: Game) {
-        let dreamGame = _.cloneDeep(game)
+    public static isInCheckMate(game: Game) {
+        let dreamGame = _.cloneDeep(game) // Clone in order to avoid changes in reference
 
         const allowedMoves: { [index: string]: string[] } = {}
 
         const pieces = BoardUtils.getAllPiecesInTheBoard(dreamGame.board, game.oppositeTurn)
         for (const piece of pieces) {
-            const moves = piece.availableMoves(dreamGame.board)
-            for (const move of moves) {
-                dreamGame.movePieceToDestination(_.clone(piece), move)
-                if (!GameVerificator.isOnCheck(dreamGame.board, game.currentTurn)) {
-                    if (allowedMoves[piece.id]) {
-                        allowedMoves[piece.id].push(move)
-                    } else {
-                        allowedMoves[piece.id] = [move]
-                    }
+            const availableMoves = piece.availableMoves(dreamGame.board)
+            for (const destination of availableMoves) {
+                dreamGame.movePieceToDestination(_.clone(piece), destination)
+                if (!Check.isInCheck(dreamGame.board, game.currentTurn)) {
+                    allowedMoves[piece.id]
+                        ? allowedMoves[piece.id].push(destination)
+                        : (allowedMoves[piece.id] = [destination])
                 }
                 dreamGame = _.cloneDeep(game)
             }
@@ -43,13 +48,11 @@ export class GameVerificator {
         const isCheckMate = _.isEmpty(allowedMoves)
 
         if (!isCheckMate) {
-            game.checkMoves = {
+            Check.movesAllowedByCheckedPlayer = {
                 color: game.oppositeTurn,
                 movesById: allowedMoves
             }
         }
-
-        console.log(allowedMoves)
 
         return isCheckMate
     }

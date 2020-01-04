@@ -3,7 +3,6 @@ div
     #game
         Top-Menu
         Board
-        Bottom-Menu
 
 </template>
 
@@ -11,35 +10,42 @@ div
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import Board from '~components/Board.vue'
 import TopMenu from '~components/TopMenu.vue'
-import BottomMenu from '~components/BottomMenu.vue'
 import { store } from '~/front/store'
 import { Color } from '~/chess/Piece'
 
 @Component({
     components: {
         Board,
-        TopMenu,
-        BottomMenu
+        TopMenu
     }
 })
 export default class Game extends Vue {
-    private game = store.state.game
+    game = store.state.game
+    notifications = store.state.notifications
 
     @Watch('game')
     onGameChange() {
-        const board: any = this.$children.find((child: Object) =>
-            child.hasOwnProperty('renderBoard')
-        )
-        board.renderBoard()
-
-        if (this.game.isOnCheck !== false) {
-            alert('Check to: ' + Color[this.game.isOnCheck] + ' king.')
+        if (this.game.isCheck !== false) {
+            if (this.game.isCheckMate !== false) {
+                this.$notify({
+                    title: 'Check mate',
+                    text: `Check mate. ${Color[this.game.oppositeTurn]} wins the game.`
+                })
+            } else {
+                this.$notify({
+                    title: 'Check',
+                    text: `The ${Color[this.game.isCheck]} king is in check.`
+                })
+            }
         }
+    }
 
-        if (this.game.isOnCheckMate !== false) {
-            alert('Check mate to: ' + Color[this.game.isOnCheckMate] + ' king')
-        }
+    @Watch('notifications')
+    onNewNotification() {
+        this.$notify({
+            title: 'Error',
+            text: this.notifications[this.notifications.length - 1]
+        })
     }
 }
 </script>
-

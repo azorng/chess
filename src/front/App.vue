@@ -1,5 +1,6 @@
 <template lang="pug">
   #app
+    notifications(position="top right")
     Game
 
 </template>

@@ -6,7 +6,8 @@ import { Piece } from '~/chess/Piece'
 Vue.use(Vuex)
 
 interface State {
-    game: Game
+    game: Game,
+    notifications: string[]
 }
 
 const game = new Game()
@@ -14,12 +15,17 @@ game.start()
 
 export const store = new Vuex.Store({
     state: {
-        game
+        game,
+        notifications: []
     },
     mutations: {
         move(state: State, { piece, destination }: { piece: Piece; destination: string }) {
-            game.move(piece, destination)
-            triggerReactivity(state.game)
+            try {
+                game.move(piece, destination)
+                triggerReactivity(state.game)
+            } catch (e) {
+                state.notifications.push(e.message)
+            }
         }
     }
 })

@@ -8,37 +8,29 @@ import { Pawn } from '~/chess/pieces/Pawn'
 import { OnMoveEvent } from '~/chess/OnMoveEvent'
 import { Board } from '~/chess/Board'
 import { BoardUtils } from '~/chess/BoardUtils'
-import { GameVerificator } from '~/chess/GameVerificator'
+import { Check } from '~/chess/Check'
 import _ from 'lodash'
-
-export interface AllowedMoves {
-    color: Color
-    movesById: { [index: string]: string[] }
-}
 
 export class Game {
     board: Board
     cemetery: Piece[]
     history: Board[]
     currentTurn: Color
-    isOnCheck: Color | false
-    isOnCheckMate: Color | false
-
-    checkMoves: AllowedMoves | undefined
+    isCheck: Color | false
+    isCheckMate: Color | false
 
     constructor() {
-        this.isOnCheck = false
-        this.currentTurn = Color.White
-        this.isOnCheckMate = false
+        this.isCheck = false
+        this.isCheckMate = false
         this.board = new Board()
         this.cemetery = []
         this.history = []
-        this.checkMoves = undefined
     }
 
     public start() {
         this.setPiecesInTheBoard()
         this.letPiecesKnowTheirPosition()
+        this.currentTurn = Color.White
     }
 
     get oppositeTurn() {
@@ -66,17 +58,20 @@ export class Game {
             throw Error('Move is not allowed.')
         }
 
-        if (this.checkMoves && this.checkMoves.color == this.currentTurn) {
-            const movesAllowedByPiece = this.checkMoves.movesById[piece.id]
+        if (
+            Check.movesAllowedByCheckedPlayer !== undefined &&
+            Check.movesAllowedByCheckedPlayer.color == this.currentTurn
+        ) {
+            const movesAllowedByPiece = Check.movesAllowedByCheckedPlayer.movesById[piece.id]
             if (!movesAllowedByPiece || !movesAllowedByPiece.includes(destination)) {
-                throw Error('The king is on check.')
+                throw Error('Move is not allowed. The king is in check.')
             }
         }
 
         const dreamBoard = _.cloneDeep(this)
         dreamBoard.movePieceToDestination(_.clone(piece), destination)
-        if (GameVerificator.isOnCheck(dreamBoard.board, this.oppositeTurn)) {
-            throw Error("Can't move here, king could be killed.")
+        if (Check.isInCheck(dreamBoard.board, this.oppositeTurn)) {
+            throw Error('Move is not allowed. The king would be in check.')
         }
     }
 

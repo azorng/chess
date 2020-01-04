@@ -13,6 +13,7 @@ import $ from 'jquery'
 @Component
 export default class Piece extends Vue {
     piece: PieceBase
+    game = store.state.game
 
     get color() {
         return Color[this.piece.color]
@@ -23,9 +24,9 @@ export default class Piece extends Vue {
     }
 
     availableMoves() {
-        if (this.piece.color == store.state.game.currentTurn) {
+        if (this.piece.color == this.game.currentTurn && this.game.isCheckMate === false) {
             this.clearMoves()
-            const availableMoves = this.piece.availableMoves(store.state.game.board)
+            const availableMoves = this.piece.availableMoves(this.game.board)
             availableMoves.forEach(move => {
                 document.getElementById(move)!.classList.add('available-move')
             })
