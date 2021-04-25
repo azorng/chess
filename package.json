@@ -29,7 +29,7 @@
     "@vue/cli-plugin-typescript": "^3.9.0",
     "@vue/cli-service": "^3.9.0",
     "module-alias": "^2.2.0",
-    "pug": "^2.0.4",
+    "pug": "^3.0.1",
     "pug-plain-loader": "^1.0.0",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
     "typescript": "^3.7.3",
