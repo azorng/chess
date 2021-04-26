@@ -7,7 +7,7 @@ div
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
+import { Component, Vue } from 'vue-property-decorator'
 import { Color } from '~/chess/Piece'
 import { store } from '~/front/store'
 

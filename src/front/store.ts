@@ -33,8 +33,8 @@ export const store = new Vuex.Store({
 const triggerReactivity = (...objs: any) => {
     for (let obj of objs) {
         if (obj) {
-            Vue.set(obj, 'xxx', undefined)
-            delete obj['xxx']
+            Vue.set(obj, '_xxx', undefined)
+            delete obj['_xxx']
         }
     }
 }

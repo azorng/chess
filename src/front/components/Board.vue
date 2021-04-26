@@ -9,12 +9,10 @@ div
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import Piece from '~components/Piece.vue'
 import { store } from '~/front/store'
-import { PieceName, Color } from '~/chess/Piece'
 import { Board as BoardObj } from '~/chess/Board'
-import { Game } from '~/chess/Game'
 import $ from 'jquery'
 
 @Component

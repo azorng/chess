@@ -1,5 +1,4 @@
 import { Piece, PieceName, Color } from '~/chess/Piece'
-import { Game } from '~/chess/Game'
 import { Board } from '~/chess/Board'
 
 

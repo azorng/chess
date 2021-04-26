@@ -1,12 +1,11 @@
 <template lang="pug">
 div.piece(@click='availableMoves')
-    img(:src='`/pieces/${color}_${name}.svg`')
+    img(:src='`./pieces/${color}_${name}.svg`')
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
+import { Component, Vue } from 'vue-property-decorator'
 import { Color, PieceName, Piece as PieceBase } from '~/chess/Piece'
-import { Board } from '~/chess/Board'
 import { store } from '~/front/store'
 import $ from 'jquery'
 

@@ -1,5 +1,6 @@
 module.exports = {
-    outputDir: __dirname + '/dist/public',
+    outputDir: __dirname + '/dist',
+    publicPath: '.',
     configureWebpack: {
         entry: './src/front/main.ts',
         resolve: {
