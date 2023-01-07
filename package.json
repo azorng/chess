@@ -27,7 +27,7 @@
     "@types/uuid": "^3.4.9",
     "@vue/cli-plugin-pwa": "^3.9.0",
     "@vue/cli-plugin-typescript": "^4.5.12",
-    "@vue/cli-service": "^4.5.12",
+    "@vue/cli-service": "^5.0.8",
     "module-alias": "^2.2.0",
     "pug": "^3.0.2",
     "pug-plain-loader": "^1.1.0",
